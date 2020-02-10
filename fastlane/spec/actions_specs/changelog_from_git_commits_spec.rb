@@ -16,12 +16,12 @@ describe Fastlane do
 
       it "Uses the provided pretty format to collect log messages" do
         result = Fastlane::FastFile.new.parse("lane :test do
-          changelog_from_git_commits(pretty: '%s%n%b')
+          changelog_from_git_commits(pretty: '- %s by (%ae)')
         end").runner.execute(:test)
 
         tag_name = %w(git rev-list --tags --max-count=1).shelljoin
         describe = %W(git describe --tags #{tag_name}).shelljoin
-        changelog = %W(git log --pretty=%s%n%b #{describe}...HEAD).shelljoin
+        changelog = %W(git log --pretty='- %s by (%ae)' #{describe}...HEAD).shelljoin
         expect(result).to eq(changelog)
       end
 
